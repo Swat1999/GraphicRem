@@ -1,0 +1,269 @@
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+.header {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav a {
+  background-color: #38bdf8;
+  margin: 0 10px;
+  text-decoration: none;
+  color: #0f172a;
+  text-decoration: none;
+  position: center;
+  padding: 6px 8px;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  box-shadow: 0 0 12px #38bdf8;
+}
+nav a:hover{
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.1); /* Optional glow */
+  border-radius: 4px;
+}
+.auth-buttons a {
+  margin: 0 5px;
+  background: gold;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: black;
+}
+.auth-buttons a:hover{
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.1); /* Optional glow */
+  border-radius: 4px;
+}
+.hero {
+  text-align: center;
+  background: #e6e6fa;
+  padding: 40px 20px;
+  color: #38bdf8;
+  text-shadow: 0 0 10px #38bdf8;
+}
+.hero h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+.hero h3 {
+  font-size: 1.2em;
+  color: #94a3b8;
+}
+.hero button {
+  background: #7f5af0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 0 12px #7f5af0;
+  transition: transform 0.3s ease;
+}
+.hero button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #7f5af0;
+}
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 40px;
+  justify-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.image-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 300px;
+  display: inline-block;
+}
+.image-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+.image-card .overlay-center {
+  border-radius: 10px;
+  transition: opacity 0.3s ease;
+}
+.image-card:hover .overlay-center{
+  content: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvkUFmp5jSF-DhrD5102bzHU7RbidetfqYfA&s");
+}
+.image-card:nth-child(2):hover .overlay-center {
+  content: url("https://miro.medium.com/v2/resize:fit:549/1*UN3_vDPpkqhznJfXO4VmvA.png");
+}
+.image-card:nth-child(3):hover .overlay-center {
+  content: url("https://chisellabs.com/glossary/wp-content/uploads/2021/06/What-is-an-API.png");
+}
+.image-card:nth-child(4):hover .overlay-center {
+  content: url("https://letstalkscience.ca/sites/default/files/2021-01/Robot_thinking.jpg");
+}
+.overlay-center {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+.image-card:hover .overlay-center {
+  opacity: 0.8;
+}
+.image-grid img {
+   width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+.overlay-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0,0,0,0.7);
+  pointer-events: none;
+}
+.image-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.image-card:hover .overlay-center {
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+.footer {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.social-icons img {
+  width: 30px;
+  margin: 0 5px;
+}
+.footer-columns {
+  display: flex;
+  justify-content: center; /* Centers the columns */
+  gap: 40px;
+  width: 100%;
+  margin-top: 20px;
+}
+.footer-columns div h3 {
+  margin-bottom: 10px;
+}
+.footer-columns ul {
+  list-style: none;
+  padding: 0;
+}
+.footer-columns li {
+  margin: 10px 0;
+}
+.footer-columns a{
+  color: #e7e3e3;
+  text-decoration: none;
+}
+.footer-columns a:hover{
+  text-decoration: none;
+}
+.logo {
+   height: 40px;          
+  width: auto;           
+  max-width: 150px;      
+  object-fit: contain;   
+}
+
+
+@media (max-width: 480px) {
+  .header,
+  .nav,
+  .auth-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero h1 {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  }
+  .logo {
+    height: 35px;
+  }
+.image-grid {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .image-card {
+    width: 90%;
+  }
+
+  .footer-columns {
+    flex-direction: column;
+    align-items: center;
+  }
+
+@media (max-width: 768px) {
+  .image-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .footer-columns {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .image-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 30px 60px;
+    gap: 24px;
+  }
+
+  .image-card {
+    width: 320px;
+  }
+
+  .hero h1 {
+    font-size: 2.4rem;
+  }
+
+  nav a,
+  .menu-link {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
+  .footer-columns {
+    gap: 60px;
+  }
+
+  .auth-buttons a {
+    padding: 8px 16px;
+    font-size: 1rem;
+  }
+
+  .logo {
+    height: 40px;
+  }
+}
