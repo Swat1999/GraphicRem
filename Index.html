@@ -9,14 +9,73 @@
 <body>
   <header class="header">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQFtC6Og-8BtXMjVYr-JNDXH-p_A8r3FOnlg&s" alt="Logo" class="logo" />
-    <nav>
+    <nav class="header-nav">
+      <ul class="nav-menu">
+      <li class="dropdown">
       <a href="#">Products</a>
-      <a href="#">About</a>
+      <ul class="dropdown-content">
+        <li><a href="#">AI Modules</a></li>
+        <li><a href="#">Devops tools</a></li>
+        <li><a href="#">Data science tools</a></li>
+        <li><a href="#">Cybersecurity tools</a></li>
+        </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#">About</a>
+          <ul class="dropdown-content">
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">What we provide</a></li>
+            <li><a href="#">How we help</a></li>
+            <li><a href="#">What will you get</a></li>
+            </ul>
+            </li>
+      <li class="dropdown">
       <a href="#">Community</a>
+      <ul class="dropdown-content">
+        <li><a href="#">Reddit</a></li>
+        <li><a href="#">Stack overflow</a></li>
+        <li><a href="#">Discord</a></li>
+        <li><a href="#">Thread</a></li>
+        </ul>
+        </li>
+      <li class="dropdown">
       <a href="#">Resources</a>
+      <ul class="dropdown-content">
+        <li><a href="#">Gen AI & GPT - AI</a></li>
+        <li><a href="#">AWS & Azure - Devops</a></li>
+        <li><a href="#">PowerBI & Python - Data Science</a></li>
+        <li><a href="#">CLoudflare - Cybersecurity</a></li>
+        </ul>
+        </li>
+      <li class="dropdown">
       <a href="#">Subscribe</a>
+      <ul class="dropdown-content">
+        <li><a href="#">Free Version</a></li>
+        <li><a href="#">Beginner Package</a></li>
+        <li><a href="#">Developer Package</a></li>
+        <li><a href="#">Engineer Package</a></li>
+        <li><a href="#">Damn youre good Package</a></li>
+        </ul>
+        </li>
+      <li class="dropdown">
       <a href="#">Contact</a>
+      <ul class="dropdown-content">
+        <li><a href="#">Email</a></li>
+        <li><a href="#">Phone</a></li>
+        <li><a href="#">Social Media</a></li>
+        <li><a href="#">Raise a ticket</a></li>
+        </ul>
+        </li>
+      <li class="dropdown">
       <a href="#">Articles</a>
+      <ul class="dropdown-content">
+        <li><a href="#">Change in AI</a></li>
+        <li><a href="#">Whats new in devops</a></li>
+        <li><a href="#">Think Analytically</a></li>
+        <li><a href="#">Keep yourself safe</a></li>
+        </ul>
+        </li>
+    </ul>
     </nav>
     <div class="auth-buttons">
       <a href="#">Sign In</a>
@@ -27,35 +86,81 @@
   <section class="hero">
     <h1>Start Your Journey Here</h1>
     <h3>We are with you</h3>
+    <p> Welcome to the place where you can get up and ready for the latest in the market and stay updated </p>
   </section>
 
-  <section class="image-grid">
-      <a href="ai.html" class="image-card">
+  <section class="Started">
+  <h2>How To Get Started</h2>
+</section>
+
+  <div class="card-grid">
+  <div class="tech-card">
     <img src="https://texturelabs.org/wp-content/uploads/Texturelabs_Grunge_264thumbnail.jpg" alt="AI" />
-    <div class="overlay-center">AI</div>
-  </a>
-  <a href="devops.html" class="image-card">
-    <img src="https://i0.wp.com/texturefabrik.com/wp-content/uploads/2020/09/texture_fabrik_cyan_textures_01.jpg?ssl=1
-" alt="DevOps" />
-    <div class="overlay-center">DevOps</div>
-  </a>
-  <a href="api.html" class="image-card">
-    <img src="https://plus.unsplash.com/premium_photo-1673481886897-64bfc9a4b81c?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8b2xkJTIwdGV4dHVyZXxlbnwwfHwwfHx8MA%3D%3D
-" alt="API" />
-    <div class="overlay-center">API</div>
-  </a>
-  <a href="ml.html" class="image-card">
+    <div class="card-label">AI/ML</div>
+    <ul class="card-menu">
+      <li><a href="ai-python.html">Python</a></li>
+      <li><a href="ai-gen.html">Gen AI</a></li>
+      <li><a href="ai-gpt.html">GPT 4.0</a></li>
+    </ul>
+  </div>
+
+<div class="tech-card">
+    <img src="https://i0.wp.com/texturefabrik.com/wp-content/uploads/2020/09/texture_fabrik_cyan_textures_01.jpg?ssl=1" alt="DevOps" />
+    <div class="card-label">DevOps</div>
+    <ul class="card-menu">
+      <li><a href="dev-azure.html">Azure</a></li>
+      <li><a href="dev-aws.html">AWS</a></li>
+      <li><a href="dev-docker.html">Docker</a></li>
+      </ul>
+      </div>
+  
+  <div class="tech-card">
+    <img src="https://plus.unsplash.com/premium_photo-1673481886897-64bfc9a4b81c?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8b2xkJTIwdGV4dHVyZXxlbnwwfHwwfHx8MA%3D%3D" alt="API" />
+    <div class="card-label">Data Science/Analytics</div>
+    <ul class="card-menu">
+      <li><a href="DSA-Python.html">Python DA</a></li>
+      <li><a href="DSA-PowerBI.html">PowerBI DV</a></li>
+      <li><a href="DSA-SQL.html">SQL DSA</a></li>
+      </ul>
+      </div>
+
+  <div class="tech-card">
     <img src="https://t3.ftcdn.net/jpg/03/00/72/90/360_F_300729077_5XCiPhBw3gOLBloFZRANR3AP4Gi9VfVR.jpg" alt="ML" />
-    <div class="overlay-center">ML</div>
-  </a>
-  </section>
+    <div class="card-label">Cybersecurity</div>
+    <ul class="card-menu">
+      <li><a href="Cyber-Linux.html">Cyber Linux</a></li>
+      <li><a href="Cyber-cloudflare.html">Cloudflare</a></li>
+      <li><a href="Cyber-AWS.html">Cyber AWS</a></li>
+      </ul>
+      </div>
+  </div>
 
   <footer class="footer">
     <div class="social-icons">
-      <a href="https://x.com/?lang=en" target="_blank"><img src="https://cdn.worldvectorlogo.com/logos/twitter-logo-2.svg" alt="Social 1" /></a>
-      <a href="https://www.instagram.com/#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1024px-Instagram_logo_2016.svg.png" alt="Social 2" /></a>
-      <a href="https://discord.com/" target="_blank"><img src="https://static.vecteezy.com/system/resources/previews/006/892/625/non_2x/discord-logo-icon-editorial-free-vector.jpg" alt="Social 3" /></a>
-      <a href="https://www.facebook.com/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png" alt="Social 4" /></a>
+      <div class="social-texts">
+      <a href="https://x.com/?lang=en" target="_blank">
+        <img src="https://images-platform.99static.com//bABwyPaSlYVZW-E95OkdmD00XZY=/221x221:780x781/fit-in/500x500/99designs-contests-attachments/129/129933/attachment_129933858" alt="Social 1" />
+        </a>
+        <span>Twitter</span>
+        </div>
+        <div class="social-texts">
+      <a href="https://www.instagram.com/#" target="_blank">
+        <img src="https://images-platform.99static.com//8731F2XCutThOEPWeGEatr1SeLs=/554x502:3048x2992/fit-in/500x500/projects-files/77/7714/771418/3ecfd419-611b-44ab-8fe9-e2b3b05e3dcc.png" alt="Social 2" />
+        </a>
+        <span>Instagram</span>
+        </div>
+        <div class="social-texts">
+      <a href="https://discord.com/" target="_blank">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXvV2npVBZeMSZCRIroRzlqEwFuyYsws-VYA&s" alt="Social 3" />
+        </a>
+        <span>Discord</span>
+        </div>
+        <div class="social-texts">
+      <a href="https://www.facebook.com/" target="_blank">
+        <img src="https://i.pinimg.com/736x/2c/5a/8d/2c5a8dd759a3ed8770c18f612b609ed4.jpg" alt="Social 4" />
+        </a>
+        <span>Facebook</span>
+        </div>
     </div>
     <div class="footer-columns">
       <div>
