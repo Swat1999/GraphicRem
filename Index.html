@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<div id="welcome-overlay">
+  <div class="welcome-content">
+    <h1 id="welcome-text"></h1>
+    <button id="start-button">Start</button>
+  </div>
+</div>
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Start Your Journey</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1, user-scalable=no" />
+  <title>FutureRem</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+  <!--header section-->
   <header class="header">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQFtC6Og-8BtXMjVYr-JNDXH-p_A8r3FOnlg&s" alt="Logo" class="logo" />
     <nav class="header-nav">
@@ -78,17 +88,22 @@
     </ul>
     </nav>
     <div class="auth-buttons">
-      <a href="#">Sign In</a>
-      <a href="#">Register</a>
+      <a href="#" id="SignInBtn">Sign In</a>
+      <a href="#" id="SignUpBtn">Register</a>
     </div>
   </header>
 
-  <section class="hero">
-    <h1>Start Your Journey Here</h1>
-    <h3>We are with you</h3>
-    <p> Welcome to the place where you can get up and ready for the latest in the market and stay updated </p>
-  </section>
 
+  <!--First section-->
+<section class="hero">
+  <h1><span class="ai-flare">Start Your</span> <span class="ai-glow">Journey Here</span></h1>
+  <h3 class="ai-subtitle">Master the future with AI, Data, and DevOps</h3>
+  <p class="ai-description">
+    Welcome to a learning platform built for thinkers, builders, and explorers. Stay ahead with cutting-edge resources and deep learning paths.
+  </p>
+</section>
+
+<!--second section-->
   <section class="Started">
   <h2>How To Get Started</h2>
 </section>
@@ -133,37 +148,133 @@
       <li><a href="Cyber-AWS.html">Cyber AWS</a></li>
       </ul>
       </div>
-  </div>
 
+  <div class="tech-card">
+  <img src="https://media.freestocktextures.com/cache/98/77/9877ce5c0ff678e95b26394b061e1d43.jpg" alt="Cloud" />
+  <div class="card-label">Designing - UI/UX</div>
+  <ul class="card-menu">
+    <li><a href="design-figma.html">Figma</a></li>
+    <li><a href="design-balframe.html">Balsamic Wireframe</a></li>
+    <li><a href="design-threejs.html">Three JS</a></li>
+  </ul>
+</div>
+</div>
+
+
+<!--KNow the process section-->
+<section class="process-section">
+  <h2 class="process-heading">Know the process.<br>Become an expert in your own way.</h2>
+
+  <div class="process-grid">
+    <div class="process-card">
+      <h3>Choose your domain</h3>
+      <p>Whether you're a developer, tester, engineer, or manager — start with the role that fits you best.</p>
+      <img src="https://www.naukri.com/campus/career-guidance/wp-content/uploads/2023/09/career-planning-1024x1024.jpg" alt="Process visual" class="process-img">
+    </div>
+    <div class="process-card">
+      <h3>Choose what you wanna learn</h3>
+      <p>Pick from Python, SQL, Docker, AWS, and more — based on your domain.</p>
+      <img src="https://www.inspirisys.com/uploads/blog_image/Top-10-Software-Development-Tools.png" alt="Process visual" class="process-img">
+    </div>
+    <div class="process-card">
+      <h3>Set up alerts for new</h3>
+      <p>Get notified when fresh learning material drops — stay ahead of the curve.</p>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH6JImtRr_PORjJojfyorJksXR84hWSXq9yg&s" alt="Process visual" class="process-img">
+    </div>
+    <div class="process-card">
+      <h3>Bookmark anything</h3>
+      <p>Save resources for later, revisit them when you're ready to dive deeper.</p>
+      <img src="https://www.znetlive.com/blog/wp-content/uploads/2016/12/top-social-bookmarking-sites.jpg" alt="Process visual" class="process-img">
+    </div>
+    <div class="process-card">
+      <h3>Learn at your own speed</h3>
+      <p>No rush. Master concepts at your pace. The only shortcut is consistency.</p>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyPVypf2WUUemVkNnCd6xxeUNf9E-owWWWdw&s" alt="Process visual" class="process-img">
+    </div>
+    <div class="process-card">
+      <h3>Start project and get graded</h3>
+      <p>Apply what you’ve learned and get your skills evaluated. You've got this.</p>
+      <img src="https://storage.googleapis.com/realtyplusmag-news-photo/news-photo/115957.Large-Project-Completion.jpg" alt="Process visual" class="process-img">
+    </div>
+  </div>
+</section>
+
+
+<!--Subscription section-->
+  <section class="plans-section">
+  <h2>Explore Your Path Now</h2>
+
+ <div class="plan-cards">
+    <div class="plan-card">
+      <h3>Free Version</h3>
+      <p class="price">$0/mo</p>
+      <ul>
+        <li>Access to free content</li>
+        <li>Community connection</li>
+        <li>AI usage at ease</li>
+        <li>Trend alerts</li>
+      </ul>
+      <button>Purchase</button>
+    </div>
+
+    <div class="plan-card highlighted">
+      <h3>Beginner Version</h3>
+      <p class="price">$15/mo</p>
+      <ul>
+        <li>Wide content access</li>
+        <li>Custom AI usage</li>
+        <li>Network and grow</li>
+        <li>Custom alerts</li>
+      </ul>
+      <button>Purchase</button>
+    </div>
+
+     <div class="plan-card">
+      <h3>Developer Version</h3>
+      <p class="price">$32/mo</p>
+      <ul>
+        <li>70% content access</li>
+        <li>Advanced AI tools</li>
+        <li>Live chat + connections</li>
+        <li>Alert customizations</li>
+      </ul>
+      <button>Purchase</button>
+    </div>
+  </div>
+</section>
+
+<!--footer section-->
   <footer class="footer">
     <div class="social-icons">
       <div class="social-texts">
       <a href="https://x.com/?lang=en" target="_blank">
         <img src="https://images-platform.99static.com//bABwyPaSlYVZW-E95OkdmD00XZY=/221x221:780x781/fit-in/500x500/99designs-contests-attachments/129/129933/attachment_129933858" alt="Social 1" />
-        </a>
+      </a>
         <span>Twitter</span>
         </div>
         <div class="social-texts">
       <a href="https://www.instagram.com/#" target="_blank">
         <img src="https://images-platform.99static.com//8731F2XCutThOEPWeGEatr1SeLs=/554x502:3048x2992/fit-in/500x500/projects-files/77/7714/771418/3ecfd419-611b-44ab-8fe9-e2b3b05e3dcc.png" alt="Social 2" />
-        </a>
+      </a>
         <span>Instagram</span>
         </div>
         <div class="social-texts">
       <a href="https://discord.com/" target="_blank">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXvV2npVBZeMSZCRIroRzlqEwFuyYsws-VYA&s" alt="Social 3" />
-        </a>
+      </a>
         <span>Discord</span>
         </div>
         <div class="social-texts">
       <a href="https://www.facebook.com/" target="_blank">
         <img src="https://i.pinimg.com/736x/2c/5a/8d/2c5a8dd759a3ed8770c18f612b609ed4.jpg" alt="Social 4" />
-        </a>
+      </a>
         <span>Facebook</span>
         </div>
     </div>
+    
     <div class="footer-columns">
-      <div>
+      <div class="footer-column">
+        <div class="use-case">
         <h3>Use cases </h3>
         <ul>
           <li><a href="#" target="_blank" rel="noopener noreferrer">UI/UX</li></a>
@@ -175,7 +286,8 @@
           <li><a href="#" target="_blank" rel="noopener noreferrer">Team Collab</li></a>
         </ul>
       </div>
-      <div>
+      <div class="footer-column">
+        <div class="explore">
         <h3>Explore</h3>
         <ul>
           <li><a href="#" target="_blank" rel="noopener noreferrer">Contacts</li></a>
@@ -184,10 +296,111 @@
           <li><a href="#" target="_blank" rel="noopener noreferrer">Careers</li></a>
           <li><a href="#" target="_blank" rel="noopener noreferrer">Raise a Request</li></a>
         </ul>
-      </div>
+        </div>
+       </div>
+
+<div class="newsletter">
+  <h3>Tune in for more</h3>
+  <form id="newsletterForm">
+    <input type="email" id="newsletterEmail" placeholder="you@example.com" required />
+    <button type="submit">Submit</button>
+  </form>
+</div>
+</div>
+
+<!-- dark-light mode button-->
+      <button id="theme-toggle" class="theme-toggle-btn"></button>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+<!-- Sign in-->
+<div id="signInModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Sign In</h2>
+    <form id="signInForm">
+      <label for="email">Email/Username</label>
+      <input type="email" id="signinEmail" placeholder="Email" required />
+
+      <label for="password">Password</label>
+      <div class="password-wrapper">
+      <input type="password" id="signinPassword" placeholder="password" required />
+      <span id="toggleSigninPassword" class="toggle-password">👁️</span>
+      </div>
+
+      <button type="submit">Sign In</button>
+    </form>
+    <div class="links">
+      <a href="#" id="forgotPasswordLink">Forgot password?</a><br />
+      <a href="#" id="signInToSignUpLink">Create account</a>
+    </div>
+    <div class="social-login">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/800px-Google_%22G%22_logo.svg.png" alt="Google" />
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSTWlnJCnn2ljYqv2t4XY9bM5U4pnohvXZRw&s" alt="Microsoft" />
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiXN9xSEe8unzPBEQOeAKXd9Q55efGHGB9BA&s" alt="Facebook" />
+    </div>
+  </div>
+</div>
+
+<!-- Sign up-->
+ <div id="signUpModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn close-signup">&times;</span>
+    <h2>Create Your Account</h2>
+    <form id="signupForm">
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" placeholder="First Name" />
+
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" placeholder="Last Name" />
+
+      <label for="signupEmail">Email</label>
+      <input type="email" id="signupEmail" placeholder="Email" />
+
+      <label for="signupPassword">Password</label>
+      <div class="password-wrapper">
+      <input type="password" id="signupPassword" placeholder="Password" />
+      <span id="toggleSignupPassword" class="toggle-password">👁️</span>
+      </div>
+
+      <label for="confirmPassword">Confirm Password</label>
+      <div class="password-wrapper">
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" />
+      <span id="toggleConfirmPassword" class="toggle-password">👁️</span>
+      </div>
+
+      <button type="submit">Create Account</button>
+    </form>
+    <div class="links">
+      <a href="#" id="showSignInLink">Already a member? Sign In</a>
+    </div>
+  </div>
+  </div>
+<script src="script.js"></script>
 </body>
+<div id="forgotPasswordModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn close-forgot">&times;</span>
+    <h2>Reset Your Password</h2>
+    <form id="forgotPasswordForm">
+      
+      <label for="forgotEmail">Email</label>
+      <input type="email" id="forgotEmail" placeholder="Your registered email" required />
+      
+      <label for="newPassword">New Password</label>
+      <div class="password-group">
+        <input type="password" id="newPassword" placeholder="New Password" required />
+        <span id="toggleNewPassword" class="toggle-password">👁️</span>
+      </div>
+
+      <label for="confirmNewPassword">Confirm New Password</label>
+      <div class="password-group">
+        <input type="password" id="confirmNewPassword" placeholder="Confirm New Password" required />
+        <span id="toggleConfirmNewPassword" class="toggle-password">👁️</span>
+      </div>
+
+      <button type="submit">Reset Password</button>
+    </form>
+  </div>
+</div>
 </html>

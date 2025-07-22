@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <title>FutureRem - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="dark-mode"> <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQFtC6Og-8BtXMjVYr-JNDXH-p_A8r3FOnlg&s" alt="Brand Logo" class="dashboard-logo">
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="nav-button"><i class="fas fa-home"></i> Progress </a></li>
+                    <li><a href="#" class="nav-button"><i class="fas fa-chart-line"></i> Add-Ons </a></li>
+                    <li><a href="#" class="nav-button"><i class="fas fa-box"></i> Explore Market </a></li>
+                    <li><a href="#" class="nav-button"><i class="fas fa-cog"></i> Projects </a></li>
+                    <li><a href="#" class="nav-button"><i class="fas fa-question-circle"></i> Community </a></li>
+                    <li><a href="#" class="nav-button"><i class="fas fa-question-circle"></i> Grading </a></li>
+                    <li><a href="#" class="nav-button"><i class="fas fa-question-circle"></i> Subscriptions </a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutButton" class="nav-button logout-button"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1 id="welcomeMessage">Welcome back, User!</h1>
+                </div>
+                <div class="header-right">
+                    <button id="aiAssistantButton" class="header-button"><i class="fas fa-robot"></i> AI Assistant</button>
+                    <button id="themeToggleButton" class="header-button"><i class="fas fa-sun"></i></button> 
+                    <div class="profile-dropdown-container"> 
+                        <button id="profileButton" class="header-button"><i class="fas fa-user-circle"></i> Profile</button>
+                        <div id="profileDropdown" class="profile-dropdown-content">
+                             <div class="profile-dropdown-header">
+                            <img src="https://via.placeholder.com/60/6366f1/FFFFFF?text=P" alt="Profile Picture" class="profile-picture">
+                            </div>
+                             <ul class="profile-dropdown-links">
+                                <li><a href="#"><i class="fas fa-user-cog"></i> Account Settings</a></li>
+                                <li><a href="#"><i class="fas fa-user-circle"></i> Profile</a></li>
+                                <li><a href="#"><i class="fas fa-globe"></i> Language</a></li>
+                                <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+                            </ul>
+                        </div>
+                </div>
+            </header>
+
+            <section class="dashboard-overview">
+                <div class="card">
+                    <h3>Dashboard Overview</h3>
+                    <p>This is where your primary dashboard widgets and information will be displayed.</p>
+                    <p>Customize this area with charts, key metrics, and quick access features.</p>
+                </div>
+                <div class="card">
+                    <h3>Recent Activity</h3>
+                    <ul>
+                        <li>Logged in to account.</li>
+                        <li>Updated profile information.</li>
+                        <li>Accessed analytics report.</li>
+                    </ul>
+                </div>
+                 <div class="card">
+                    <h3>Quick Links</h3>
+                    <div class="quick-links">
+                        <a href="#" class="quick-link-button"><i class="fas fa-plus-circle"></i> New Report</a>
+                        <a href="#" class="quick-link-button"><i class="fas fa-cloud-upload-alt"></i> Upload Data</a>
+                        <a href="#" class="quick-link-button"><i class="fas fa-bell"></i> Notifications</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <div class="chatbot-placeholder">
+            <i class="fas fa-comments"></i>
+        </div>
+    </div>
+    <script src="script.js"></script>
+   </body>
+</html>
