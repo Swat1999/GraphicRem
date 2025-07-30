@@ -1,3 +1,9 @@
+window.onerror = function(msg, url, line) {
+  console.error(`Frontend Error: ${msg} at ${line} in ${url}`);
+  return true;
+};
+const BASE_URL = "http://127.0.0.1:5500";
+
 document.addEventListener('DOMContentLoaded', function () {
   // ===========================
   // Welcome Overlay Typing 
@@ -140,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return alert("Passwords do not match!");
       }
 
-      fetch("http://localhost:3000/signup", {
+      fetch(`${BASE_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ firstName, lastName, email, password }),
@@ -150,6 +156,9 @@ document.addEventListener('DOMContentLoaded', function () {
           alert(data.message || "Signup success!");
           signupForm.reset();
           if (signUpModal) signUpModal.style.display = "none";
+          localStorage.removeItem('profileSetupComplete');
+          localStorage.setItem('userId', data.user._id);
+          window.location.href = 'profileSetup.html';
         })
         .catch(err => {
           alert("Error during signup.");
@@ -174,28 +183,44 @@ document.addEventListener('DOMContentLoaded', function () {
         return alert("Please enter both email and password.");
       }
 
-      fetch("http://localhost:3000/signin", {
+      fetch(`${BASE_URL}/signin`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json" 
+        },
+        credentials: "include",
         body: JSON.stringify({ email, password })
       })
-        .then(res => res.json())
-        .then(data => {
-          if (data.error) {
-            alert(`❌ ${data.error}`);
-          } else {
-            alert(`✅ ${data.message} Welcome, ${data.user.firstName}!`);
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('loggedInUser', data.user.firstName || email);
-            if (signInModal) signInModal.style.display = "none";
-            signInForm.reset();
-            window.location.href = 'Dashboard-User.html'; // Redirect to dashboard
-          }
-        })
-        .catch(err => {
-          alert("⚠️ Error during sign-in.");
-          console.error("Login error:", err);
-        });
+ .then(response => {
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+})
+.then(data => {
+  if (data.error) {
+    alert(`❌ ${data.error}`);
+  } else {
+    alert(`✅ ${data.message} Welcome, ${data.user.firstName}!`);
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('loggedInUser', data.user.firstName || email);
+    localStorage.setItem('userId', data.user._id);
+    if (signInModal) signInModal.style.display = "none";
+    signInForm.reset();
+    
+    const profileSetupComplete = data.user.profileSetupComplete || localStorage.getItem('profileSetupComplete');
+    if (profileSetupComplete === 'true') {
+      window.location.href = 'Dashboard-User.html';
+    } else {
+      window.location.href = 'profileSetup.html';
+    }
+  }
+})
+.catch(err => {
+  alert("⚠️ Error during sign-in. Please check your connection.");
+  console.error("Login error:", err);
+});
     });
   }
 
@@ -290,6 +315,111 @@ document.addEventListener('DOMContentLoaded', function () {
           body: JSON.stringify({ email, newPassword }),
         });
 
+
+        // AI assistant function
+        // 1. Modal Elements
+const aiAssistantButton = document.getElementById('aiAssistantButton');
+const aiModal = document.getElementById('aiAssistantModal');
+const recommendationsContainer = document.getElementById('recommendationsContainer');
+const saveRecommendationsBtn = document.getElementById('saveRecommendations');
+const cancelRecommendationsBtn = document.getElementById('cancelRecommendations');
+
+// 2. Event Listeners
+if (aiAssistantButton) {
+  aiAssistantButton.addEventListener('click', async () => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      alert('Please sign in to use AI Assistant');
+      return;
+    }
+    
+    aiModal.style.display = 'flex';
+    loadRecommendations(userId);
+  });
+}
+
+// 3. Core Functions
+async function loadRecommendations(userId) {
+  try {
+    recommendationsContainer.innerHTML = `
+      <div class="loading-spinner"></div>
+      <p>Analyzing your skills and market trends...</p>
+    `;
+    
+    const response = await fetch('http://localhost:3000/api/ai/get-recommendations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: localStorage.getItem('userId') })
+    });
+    
+    const { courses } = await response.json();
+    renderCourses(courses);
+    
+  } catch (error) {
+    recommendationsContainer.innerHTML = `
+      <p class="error">Error: ${error.message}</p>
+    `;
+  }
+}
+
+function renderCourses(courses) {
+  recommendationsContainer.innerHTML = courses.map(course => `
+    <div class="course-card">
+      <input type="checkbox" id="course_${course.id}" value="${course.id}">
+      <label for="course_${course.id}">
+        <h4>${course.title}</h4>
+        <p class="provider">${course.provider}</p>
+        <p class="match-reason">${course.matchReason}</p>
+        <a href="${course.url}" target="_blank">Preview</a>
+      </label>
+    </div>
+  `).join('');
+}
+
+// 4. Save/Cancel Handlers
+if (saveRecommendationsBtn) {
+  saveRecommendationsBtn.addEventListener('click', async () => {
+    const userId = localStorage.getItem('userId');
+    const selected = Array.from(
+      document.querySelectorAll('.course-card input:checked')
+    ).map(el => el.value);
+    
+    try {
+      await fetch('/api/ai/save-courses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, courses: selected })
+      });
+      
+      aiModal.style.display = 'none';
+      refreshDashboardCourses();
+    } catch (error) {
+      alert('Save failed: ' + error.message);
+    }
+  });
+}
+
+if (cancelRecommendationsBtn) {
+  cancelRecommendationsBtn.addEventListener('click', () => {
+    aiModal.style.display = 'none';
+  });
+}
+
+// 5. Dashboard Integration
+function refreshDashboardCourses() {
+  const container = document.getElementById('userCoursesContainer');
+  if (!container) return;
+  
+  // Temporary content until real data loads
+  container.innerHTML = `
+    <div class="loading-spinner small"></div>
+    <p>Updating your learning path...</p>
+  `;
+  
+  // Load actual courses (implement this next)
+  loadUserCourses();
+}
+
         const data = await res.json();
 
         if (res.ok) {
@@ -366,7 +496,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
 
-      // AI Assistant button
+      //AI Assistant button
       const aiAssistantButton = document.getElementById('aiAssistantButton');
       if (aiAssistantButton) { 
         aiAssistantButton.addEventListener('click', () => {
@@ -377,9 +507,10 @@ document.addEventListener('DOMContentLoaded', function () {
       // ===========================================
       // Profile Dropdown Toggle Logic
       // ===========================================
+      const profileButton = document.getElementById('profileButton');
       const profileDropdown = document.getElementById('profileDropdown');
 
-      if (profileDropdown) { 
+      if (profileButton && profileDropdown) { 
         profileButton.addEventListener('click', (event) => {
             event.stopPropagation(); 
             profileDropdown.classList.toggle('show');
@@ -398,4 +529,254 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
   }
-}); 
+
+
+  // =====================
+  //  NEW AI ASSISTANT 
+  // =====================
+
+  // AI Assistant Modal Logic
+  const aiAssistantButton = document.getElementById('aiAssistantButton');
+  const aiModal = document.getElementById('aiAssistantModal');
+  const recommendationsContainer = document.getElementById('recommendationsContainer');
+  const saveRecommendationsBtn = document.getElementById('saveRecommendations');
+  const cancelRecommendationsBtn = document.getElementById('cancelRecommendations');
+
+  if (aiAssistantButton) {
+    aiAssistantButton.addEventListener('click', async () => {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        alert('Please sign in to use AI Assistant');
+        return;
+      }
+      aiModal.style.display = 'flex';
+      loadRecommendations(userId);
+    });
+  }
+
+  function showErrorState(error = { message: 'Unknown error' }) {
+  const recommendationsContainer = document.getElementById('recommendationsContainer');
+  if (recommendationsContainer) {
+    recommendationsContainer.innerHTML = `
+    <div class="error-message">
+      <i class="fas fa-exclamation-triangle"></i>
+      <p>${error.message || "Failed to load recommendations"}</p>
+      <button onclick="loadRecommendations()">Retry</button>
+    </div>
+  `;
+}
+}
+
+  async function loadRecommendations() {
+    try {
+      const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem('token');
+      if (!userId) throw new Error('User not logged in');
+
+      showLoadingState();
+      
+      const response = await fetch('http://localhost:3000/api/ai/get-recommendations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', authorization: `Bearer ${token}` },
+        body: JSON.stringify({ userId }),
+        credentials: 'include'
+      });
+      
+      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+      const data = await response.json();
+      renderCourses(data.courses || []);
+    
+  } catch (error) {
+    showErrorState(error);
+    console.error('Recommendations error:', error);
+  }
+}
+
+function showLoadingState() {
+    recommendationsContainer.innerHTML =  `
+       <div class="loading-spinner"></div>
+      <p>Scanning 250+ courses across LinkedIn, Udemy and Coursera...</p>
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+    `;
+  }
+  function renderCourses(courses) {
+    recommendationsContainer.innerHTML = courses.length > 0 
+      ? courses.map(course => `
+          <div class="course-card">
+            <input type="checkbox" id="course_${course.id}" checked>
+            <label for="course_${course.id}">
+              <h4>${course.title}</h4>
+              <div class="course-meta">
+                <span class="provider">${course.provider}</span>
+                <span class="match-score">
+                  <i class="fas fa-bolt"></i> ${Math.round(course.matchScore * 100)}% match
+                </span>
+              </div>
+              <p class="match-reason">${course.matchReason}</p>
+              <div class="course-footer">
+                <a href="${course.url}" target="_blank" class="preview-link">
+                  <i class="fas fa-external-link-alt"></i> Preview
+                </a>
+                ${course.isTrending ? `
+                  <span class="trend-badge">
+                    <i class="fas fa-fire"></i> Trending
+                  </span>
+                ` : ''}
+              </div>
+            </label>
+          </div>
+        `).join('')
+      : `<div class="empty-state">
+          <i class="fas fa-robot"></i>
+          <p>No courses match your current profile</p>
+          <button class="retry-btn" onclick="window.loadRecommendations()">
+            <i class="fas fa-sync-alt"></i> Retry Analysis
+          </button>
+        </div>`;
+  }
+
+  if (saveRecommendationsBtn) {
+    saveRecommendationsBtn.addEventListener('click', async () => {
+      const userId = localStorage.getItem('userId');
+      const selected = Array.from(
+        document.querySelectorAll('.course-card input:checked')
+      ).map(el => {
+        const card = el.closest('.course-card');
+        return{
+          id: el.value,
+          title: card.querySelector('h4').textContent,
+          provider: card.querySelector('.provider').textContent,
+          url: card.querySelector('a').href,
+          matchReason: card.querySelector('.match-reason').textContent
+        };
+      });
+
+       try {
+        const response = await fetch('/api/ai/save-courses', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, courses: selected })
+        });
+        if (!response.ok) throw new Error('Failed to save courses');
+        
+        aiModal.style.display = 'none';
+        refreshDashboardCourses();
+      } catch (error) {
+        alert('Save failed: ' + error.message);
+      }
+    });
+  }
+   if (cancelRecommendationsBtn) {
+    cancelRecommendationsBtn.addEventListener('click', () => {
+      aiModal.style.display = 'none';
+    });
+  }
+
+  // Dashboard Integration
+  function refreshDashboardCourses() {
+    const container = document.getElementById('userCoursesContainer');
+    if (!container) return;
+    
+    container.innerHTML = `
+      <div class="loading-spinner small"></div>
+      <p>Updating your learning path...</p>
+    `;
+    
+    loadUserCourses();
+  }
+  async function loadUserCourses() {
+    try {
+      const userId = localStorage.getItem('userId');
+      const response = await fetch(`http://localhost:3000/api/ai/user-courses?userId=${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) throw new Error('Failed to load courses');
+
+      const courses = await response.json();
+      renderUserCourses(courses || []);
+       } catch (error) {
+      renderUserCoursesError(error);
+    }
+  }
+      function renderUserCourses(courses) {
+      const container = document.getElementById('userCoursesContainer');
+      if (!container) return;
+
+      container.innerHTML = courses.length > 0 
+        ? courses.map(course => `
+            <div class="user-course">
+            <div class="course-header">
+              <h4>${course.title}</h4>
+              <span class="provider">${course.provider}</span>
+            </div>
+            <div class="course-progress">
+              <div class="progress-bar">
+                <div class="progress" style="width: ${course.progress || 0}%"></div>
+              </div>
+            </div>
+            <div class="course-actions">
+              <a href="${course.url}" target="_blank" class="btn-start">
+                <i class="fas fa-external-link-alt"></i> Continue
+              </a>
+              <button class="btn-complete" data-id="${course.id}">
+                <i class="fas fa-check"></i> ${course.completed ? 'Completed' : 'Mark Complete'}
+              </button>
+            </div>
+          </div>
+        `).join('')
+      : `<div class="empty-state">
+          <p>No courses selected yet</p>
+          <button id="getRecommendations" class="btn-primary">
+            <i class="fas fa-robot"></i> Get Recommendations
+          </button>
+        </div>`;
+
+  // refresh button handler
+  document.getElementById('refreshRecommendations')?.addEventListener('click', loadUserCourses);
+    
+    // Get Recommendations button handler
+    document.getElementById('getRecommendations')?.addEventListener('click', () => {
+      document.getElementById('aiAssistantModal').style.display = 'flex';
+    });
+  } 
+  function renderUserCoursesError(error) {
+    const container = document.getElementById('userCoursesContainer');
+    if (!container) return;
+
+    container.innerHTML = `
+      <div class="error-state">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>${error.message || 'Failed to load courses'}</p>
+        <button class="retry-btn" onclick="window.loadUserCourses()">
+          <i class="fas fa-sync-alt"></i> Retry
+        </button>
+      </div>
+    `;
+  }
+  async function markCourseComplete(e) {
+    const courseId = e.target.dataset.id;
+    try {
+      const response = await fetch('/api/ai/complete-course', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: localStorage.getItem('userId'),
+          courseId
+        })
+      });
+      if (!response.ok) throw new Error('Failed to mark complete');
+         loadUserCourses(); // Refresh the list
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    }
+  }
+  if (document.getElementById('userCoursesContainer')) {
+    loadUserCourses();
+  }
+window.loadRecommendations = loadRecommendations;
+  window.loadUserCourses = loadUserCourses;
+});

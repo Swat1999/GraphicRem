@@ -5,23 +5,53 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
+const dotenv = require('dotenv');
+const { PythonShell } = require('python-shell');
+const jwt = require('jsonwebtoken');
+
+const profileRoutes = require('./Routes/profileRoutes');
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.sendStatus(401); // Unauthorized
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403); // Forbidden
+    req.user = user;
+    next();
+  });
+};
 
 const app = express();
-const PORT = 3000;
+const corsOptions = {
+  origin: ['http://127.0.0.1:5500', 'http://localhost:3000'], // allow both
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+app.use(cors(corsOptions));
+app.options('*', cors());
 
-app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+const PORT = process.env.PORT || 3000;
 
+const apiRouter = express.Router();
+apiRouter.use((req, res, next) => {
+  console.log(`Routing to: ${req.originalUrl}`);
+  next();
+});
+apiRouter.use('/', profileRoutes); 
+app.use('/api', apiRouter);
 // ✅ Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/FutureRemServ', {
-  useNewUrlParser: true,
+const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/FutureRemServ';
+mongoose.connect(mongoURI, {
+    useNewUrlParser: true,
   useUnifiedTopology: true,
-});
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-db.once("open", () => {
-  console.log("✅ Connected to MongoDB database: FutureRemServ");
-});
+})
+.then(() => console.log("✅ Connected to MongoDB"))
+.catch(err => console.error("❌ MongoDB connection error:", err));
 
 // ✅ User Schema
 const userSchema = new mongoose.Schema({
@@ -31,7 +61,7 @@ const userSchema = new mongoose.Schema({
   password:  { type: String, required: true }
 }, { timestamps: true });
 
-const User = mongoose.model('User', userSchema);
+const User = require('./Models/user'); 
 
 // ✅ Newsletter Schema
 const newsletterSubscriberSchema = new mongoose.Schema({
@@ -70,7 +100,13 @@ app.post('/signup', async (req, res) => {
     await newUser.save();
 
     console.log("📦 User saved:", newUser.email);
-    res.status(200).json({ message: "User signed up successfully!" });
+    res.status(201).json({ 
+        message: "User signed up successfully!" ,
+        user: { 
+            _id: newUser._id, 
+        firstName: newUser.firstName
+    } 
+        });
   } catch (error) {
     console.error("❌ Signup error:", error);
     res.status(500).json({ error: "Error signing up user." });
@@ -79,6 +115,8 @@ app.post('/signup', async (req, res) => {
 
 // ✅ Sign-In
 app.post('/signin', async (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -96,8 +134,21 @@ app.post('/signin', async (req, res) => {
       return res.status(401).json({ error: "Incorrect password." });
     }
 
+    const token = jwt.sign(
+      { id: user._id }, 
+      process.env.ACCESS_TOKEN_SECRET, 
+      { expiresIn: '1h' } // Token expires in 1 hour
+    );
+
     console.log("🔑 User Logged In:", user.email);
-    res.status(200).json({ message: "Login successful!", user: { firstName: user.firstName } });
+    res.status(200).json({ 
+        message: "Login successful!", 
+        user: { 
+            _id: user._id,
+            firstName: user.firstName,
+            email: user.email
+         } 
+        });
 
   } catch (error) {
     console.error("❌ Sign-in error:", error);
@@ -178,6 +229,107 @@ app.post("/reset-password", async (req, res) => {
     res.status(500).json({ error: "Error resetting password." });
   }
 });
+
+// AI Recommendation
+app.post('/api/ai/get-recommendations', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId);
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const fs = require('fs');
+        if (!fs.existsSync('./ai_service/ai_service.py')) {
+            console.warn('⚠️ Python script missing - using fallback recommendations');
+            return res.json({ courses: getFallbackRecommendations(user) });
+        }
+
+        // Prepare user data for Python
+        const userData = {
+            careerPaths: user.careerPaths,
+            skills: user.skills,
+            experience: user.experience,
+            certifications: user.certifications,
+            devSpecializations: user.devSpecializations,
+            engSpecializations: user.engSpecializations
+        };
+        const options = {
+            mode: 'text',
+            pythonOptions: ['-u'], // unbuffered stdout
+            scriptPath: './ai_service', // path to your python script
+            args: [JSON.stringify(userData)]
+        };
+         PythonShell.run('ai_service.py', options, (err, results) => {
+            if (err) {
+                console.error('Python error:', err);
+                return res.status(500).json({ 
+                    error: 'AI service error', 
+                    fallback: getFallbackRecommendations(user)
+                });
+            }
+            
+            try {
+                const recommendations = JSON.parse(results[0]);
+                res.json({ recommendations});
+            } catch (error) {
+                console.error('Parse error:', parseErr);
+                res.status(500).json({ message: 'Failed to parse recommendations' });
+            }
+        });
+    } catch (error) {
+        console.error('Recommendation error:', error);
+        res.status(500).json({ message: 'Failed to get recommendations', courses: getFallbackRecommendations(user) });
+    }
+});
+
+// Save the courses based on AI Recommendation
+app.post('/api/ai/save-courses', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { courses } = req.body;
+        
+        await User.findByIdAndUpdate(userId, {
+            $addToSet: { recommendedCourses: { $each: courses } }
+        });
+        
+        res.json({ message: 'Courses saved successfully' });
+    } catch (error) {
+        console.error('Save courses error:', error);
+        res.status(500).json({ message: 'Failed to save courses' });
+    }
+});
+// Get users coureses
+app.get('/api/ai/user-courses', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId);
+        if (!userId) {
+            return res.status(400).json({ error: "User ID required" });
+        }
+        res.json(user.recommendedCourses || []);
+    } catch (error) {
+        console.error('Get courses error:', error);
+        res.status(500).json({ 
+            error: 'Failed to get courses',
+            fallback: []
+         });
+    }
+});
+
+//JS fallback
+function getFallbackRecommendations(user) {
+    return [
+        {
+            id: "js-fallback-1",
+            title: "Python Programming",
+            provider: "Udemy",
+            url: "https://www.udemy.com/topic/python/",
+            matchReason: "Basic recommendation based on your profile"
+        }
+    ];
+}
 
 // ✅ Start Server
 app.listen(PORT, () => {
